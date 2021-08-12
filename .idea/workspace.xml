@@ -15,6 +15,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1wZzsJXuA0aQgEmDzwniVnUgH2w" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -24,7 +25,13 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.16.1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\CWork\WebStormProjects\coderhub" />
+    </key>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -37,6 +44,7 @@
       <option name="presentableId" value="Default" />
       <updated>1628681103967</updated>
       <workItem from="1628681106085" duration="11922000" />
+      <workItem from="1628752561152" duration="1083000" />
     </task>
     <servers />
   </component>
