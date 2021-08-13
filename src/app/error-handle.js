@@ -22,6 +22,10 @@ const errorHandler = (error, ctx) => {
             status = 401 // 参数错误
             message = '无效的token!'
             break
+        case errorTypes.UNPERMISSION:
+            status = 403 // 参数错误
+            message = '您不具备操作的权限!'
+            break
         default:
             status = 404
             message = 'NOT FOUND.'
@@ -29,5 +33,4 @@ const errorHandler = (error, ctx) => {
     ctx.status = status
     ctx.body = message
 }
-
 module.exports = errorHandler
