@@ -31,6 +31,10 @@ const verifyAuth = async (ctx, next) => {
     console.log('验证授权的middleware~')
     // 1.获取token
     const authorization = ctx.headers.authorization
+    if (!authorization) {
+        const error = new Error(errorType.UNAUTHORIZATION)
+        return ctx.app.emit('error', error, ctx)
+    }
     const token = authorization.replace('Bearer ', '')
     // 2.验证token
     try {
@@ -38,6 +42,7 @@ const verifyAuth = async (ctx, next) => {
             algorithm: ['RS256']
         })
         ctx.user = result
+        console.log(ctx.user)
         await next()
     } catch (err) {
         const error = new Error(errorType.UNAUTHORIZATION)
