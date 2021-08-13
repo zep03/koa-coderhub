@@ -8,6 +8,14 @@ class CommentController {
         const result = await service.create(momentId, content, id)
         ctx.body = result
     }
+    async reply(ctx, next) {
+        const { momentId, content } = ctx.request.body
+        const { id } = ctx.user
+        const { commentId } = ctx.params
+        console.log('111')
+        const result = await service.reply(momentId, content, id, commentId)
+        ctx.body = result
+    }
 }
 
 
