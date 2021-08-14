@@ -19,7 +19,8 @@ class MomentService {
 
     async getMomentList(offset, size) {
         const statement = `SELECT m.id, m.content, m.createAt, m.updateAt as updateTime,
-                        JSON_OBJECT('id', u.id, 'name', u.name) as author
+                        JSON_OBJECT('id', u.id, 'name', u.name) as author,
+                        (select count(*) from comment as c where c.moment_id = m.id) as commentCount 
                         FROM moment as m
                         left join user as u on m.user_id = u.id
                         limit ?, ?;`
