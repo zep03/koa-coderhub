@@ -15,7 +15,16 @@ class CommentService {
         } catch (err) {
             console.log(err)
         }
+    }
 
+    async update(commentId, content) {
+        const statement = `update comment set content = ? where id = ?;`
+        try {
+            const result = await connection.execute(statement, [content, commentId])
+            return result[0]
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
 
