@@ -20,7 +20,8 @@ class MomentService {
     async getMomentList(offset, size) {
         const statement = `SELECT m.id, m.content, m.createAt, m.updateAt as updateTime,
                         JSON_OBJECT('id', u.id, 'name', u.name) as author,
-                        (select count(*) from comment as c where c.moment_id = m.id) as commentCount 
+                        (select count(*) from comment as c where c.moment_id = m.id) as commentCount,
+                        (select count(*) from moment_label as ml where ml.moment_id = m.id) as labelCount 
                         FROM moment as m
                         left join user as u on m.user_id = u.id
                         limit ?, ?;`
@@ -49,6 +50,15 @@ class MomentService {
     async addLabel(momentId, labelId) {
         const statement =  `insert into moment_label (moment_id, label_id) values (?, ?);`
         const [result] = await connection.execute(statement, [momentId, labelId])
+        return result
+    }
+
+    async getLabels(momentId) {
+        const statement =  `select * from moment as m
+                            left join moment_label ml on m.id = ml.moment_id
+                            left join label l on ml.label_id = l.id
+                            where m.id = ?;`
+        const [result] = await connection.execute(statement, [momentId])
         return result
     }
 }

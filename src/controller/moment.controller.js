@@ -61,6 +61,20 @@ class MomentController {
             message: '给动态添加标签成功'
         }
     }
+
+    async getLabels(ctx, next) {
+        const momentId = ctx.params.momentId
+        const result = await momentService.getLabels(momentId)
+        const labelList = []
+        for (var item of result) {
+            labelList.push({
+                labelId: item.label_id,
+                labelName: item.name,
+                momentId: item.moment_id
+            })
+        }
+        ctx.body = labelList
+    }
 }
 
 module.exports = new MomentController()
