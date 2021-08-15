@@ -1,5 +1,8 @@
 const momentService = require('../service/moment.service.js')
-
+const fileService = require('../service/file.service.js')
+const fs = require('fs')
+const { PICTURE_PATH } = require('../constants/file-path.js')
+const { APP_HOST, APP_PORT } = require('../app/config.js')
 class MomentController {
     async create(ctx, next) {
         // 1.获取数据（user_id, content, 图片）
@@ -10,7 +13,6 @@ class MomentController {
         const result = await momentService.create(userId, content)
         ctx.body = result
     }
-
     async detail(ctx, next) {
         // 1.获取数据（momentId）
         const momentId = ctx.params.momentId
@@ -18,7 +20,6 @@ class MomentController {
         const result = await momentService.getMomentById(momentId)
         ctx.body = result
     }
-
     async list(ctx, next) {
         // 1.获取数据（momentId）
         const { offset, size } = ctx.query
@@ -26,7 +27,6 @@ class MomentController {
         const result = await momentService.getMomentList(offset, size)
         ctx.body = result
     }
-
     async update(ctx, next) {
         // 1.获取参数
         const { momentId } = ctx.params
@@ -35,13 +35,11 @@ class MomentController {
         const result = await momentService.update(content, momentId)
         ctx.body = result
     }
-
     async remove(ctx, next) {
         const { momentId } = ctx.params
         const result = await momentService.remove(momentId)
         ctx.body = result
     }
-
     async addLabels(ctx, next) {
         // 1.获取标签和动态的id
         const { labels } = ctx
@@ -61,7 +59,6 @@ class MomentController {
             message: '给动态添加标签成功'
         }
     }
-
     async getLabels(ctx, next) {
         const momentId = ctx.params.momentId
         const result = await momentService.getLabels(momentId)
@@ -75,6 +72,34 @@ class MomentController {
         }
         ctx.body = labelList
     }
+    async fileInfo(ctx, next) {
+        const { filename } = ctx.params
+        const fileInfo = await fileService.getFileInfoByFilename(filename)
+        ctx.response.set('content-type', fileInfo.mimetype)
+        ctx.body = fs.createReadStream(`${PICTURE_PATH}/${filename}`)
+    }
+    async getImages(ctx, next) {
+        try {
+            const { momentId } = ctx.params
+            const imagesObj = await fileService.getImagesByMomentId(momentId)
+            const imageList = []
+            for (let img of imagesObj) {
+                const imgUrl = `${APP_HOST}:${APP_PORT}/moment/images/${img.filename}`
+                imageList.push({
+                    imgUrl: imgUrl,
+                    mimetype: img.mimetype,
+                    size: img.size
+                })
+            }
+            console.log(imageList)
+            ctx.body = {
+                statusCode: 200,
+                message: '获取动态配图成功',
+                imageList: imageList
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 }
-
 module.exports = new MomentController()

@@ -21,7 +21,22 @@ class FileController {
             message: '上传头像成功'
         }
     }
+    async savePictureInfo(ctx, next) {
+        try {
+            // 1. 获取图像信息
+            const files = ctx.req.files
+            const { id } = ctx.user
+            const {momentId} = ctx.query
+            console.log(files)
+            // 2. 将所有的文件信息保存到数据库中
+            for (let file of files) {
+                const { filename, mimetype, size } = file
+                await fileService.createFile(filename, mimetype, size, id, momentId)
+            }
+            ctx.body = '动态的配图上传完成！'
+        } catch (err) {
+            console.log(err)
+        }
+    }
 }
-
-
 module.exports = new FileController()
